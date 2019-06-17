@@ -28,14 +28,25 @@ function boot(){(
     ID=$(openstack server list --name $NAME -f value -c ID)
 
     if [ -z "$ID" ] ; then
-        openstack server create \
-            --key-name zob \
-            --nic net-id=Ext-Net \
-            --nic net-id=management $EXTRA \
-            --image 'Ubuntu 16.04' \
-            --flavor c2-7 \
-            --user-data /tmp/userdata__$$ \
-            $NAME
+        if [ "$NAME" == "designate" ] ; then
+            openstack server create \
+                --key-name zob \
+                --nic net-id=Ext-Net \
+                --nic net-id=management $EXTRA \
+                --image 'Ubuntu 19.04' \
+                --flavor c2-7 \
+                --user-data /tmp/userdata__$$ \
+                $NAME
+        else
+            openstack server create \
+                --key-name zob \
+                --nic net-id=Ext-Net \
+                --nic net-id=management $EXTRA \
+                --image 'Ubuntu 16.04' \
+                --flavor c2-7 \
+                --user-data /tmp/userdata__$$ \
+                $NAME
+        fi
     else
         echo "$NAME already exists with ID $ID, nothing to do."
     fi
