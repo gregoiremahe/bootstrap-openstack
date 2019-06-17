@@ -1,9 +1,9 @@
 #!/bin/bash
 
 function create_keypair(){(
-    openstack keypair show zob 2>&1 >/dev/null
+    openstack keypair show deploy-server 2>&1 >/dev/null
     if [ $? -eq 1 ] ; then
-        openstack keypair create --public-key data/zob.key.pub zob
+        openstack keypair create --public-key data/zob.key.pub deploy-server
     fi
 )}
 
@@ -30,7 +30,7 @@ function boot(){(
     if [ -z "$ID" ] ; then
         if [ "$NAME" == "designate" ] ; then
             openstack server create \
-                --key-name zob \
+                --key-name deploy-server \
                 --nic net-id=Ext-Net \
                 --nic net-id=management $EXTRA \
                 --image 'Ubuntu 19.04' \
@@ -39,7 +39,7 @@ function boot(){(
                 $NAME
         else
             openstack server create \
-                --key-name zob \
+                --key-name deploy-server \
                 --nic net-id=Ext-Net \
                 --nic net-id=management $EXTRA \
                 --image 'Ubuntu 16.04' \
